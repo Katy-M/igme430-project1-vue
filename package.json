@@ -1,0 +1,26 @@
+{
+  "name": "igme430-project1-vue",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./src/server.js",
+  "scripts": {
+    "start": "node ./src/server.js",
+    "pretest": "eslint ./src --fix",
+    "test": "echo \"Tests complete\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Katy-M/igme430-project1-vue.git"
+  },
+  "author": "Katy Mollenkopf",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/Katy-M/igme430-project1-vue/issues"
+  },
+  "homepage": "https://github.com/Katy-M/igme430-project1-vue#readme",
+  "devDependencies": {
+    "eslint": "^6.4.0",
+    "eslint-config-airbnb": "^18.0.1",
+    "eslint-plugin-import": "^2.18.2"
+  }
+}
