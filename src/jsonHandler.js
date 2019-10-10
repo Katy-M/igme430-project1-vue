@@ -50,7 +50,8 @@ const getCardsMeta = (request, response) => {
 
 const createCard = (request, response, body) => {
   // make sure a name and age are included, else send a bad request
-  if (!body.name || !body.age) {
+  if (body.title === 'enter title' || body.duedate === ''
+      || body.priority === '' || body.desc === '' || body.status === '') {
     const responseJSON = {
       message: 'You must provide all of the above information.',
       id: 'badRequest',
@@ -58,17 +59,20 @@ const createCard = (request, response, body) => {
     return respondJSON(request, response, 400, responseJSON);
   }
   const newCard = {
-    name: body.name,
-    age: body.age,
+    title: body.title,
+    duedate: body.duedate,
+    priority: body.priority,
+    desc: body.desc,
+    status: body.status,
   };
 
-  if (cards[newCard.name]) {
-    cards[newCard.name] = newCard;
+  if (cards[newCard.title]) {
+    cards[newCard.title] = newCard;
     // return a 204 updated status
     return respondJSON(request, response, 204, newCard);
   }
   // create the new card and return 201 status
-  cards[newCard.name] = newCard;
+  cards[newCard.title] = newCard;
   return respondJSON(request, response, 201, newCard);
 };
 

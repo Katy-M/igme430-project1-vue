@@ -39,18 +39,27 @@ Vue.component('vuecard', {
 
 Vue.component('createform', {
     props: [],
+    data: function(){
+        return{
+            title: 'enter title',
+            duedate: '',
+            priority: '',
+            desc: '',
+            status: '',
+        }
+    },
     template: `
-    <form @submit=>
+    <form @submit="requestCreate">
         Title of Card:
-        <input type="text" name="title"><br>
+        <input type="text" v-model="title"><br>
         Due Date:
-        <input type="date" name="duedate"><br>
+        <input type="date" v-model="duedate"><br>
         Priority Level:
-        <input type="number" name="priority"><br>
+        <input type="number" v-model="priority"><br>
         Description:
-        <input type="text" name="desc"><br>
+        <input type="text" v-model="desc"><br>
         Status:
-        <select name="status">
+        <select v-model="status">
             <option value="todo">To-Do</option>
             <option value="inprogress">In Progress</option>
             <option value="completed">Completed</option>
@@ -60,22 +69,52 @@ Vue.component('createform', {
     `,
     methods: {
         // POST request for creating a new card
-        requestCreate: function (e, nameForm) {
-            // grab properties
-        
+        requestCreate(e){
             //create a new AJAX request (asynchronous)
             const xhr = new XMLHttpRequest();
             //setup connect using the selected method and url
-            xhr.open('POST', '/', true);
+            xhr.open('POST', '/createCard', true);
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
             xhr.setRequestHeader ('Accept', 'application/json');
             
-            xhr.onload = () => handleResponse(xhr, true);
+            xhr.onload = () => this.handleResponse(xhr, true);
         
-            xhr.send(`name=${name}&age=${age}`);
+            xhr.send(`title=${this.title}&duedate=${this.duedate}&priority=${this.priority}&desc=${this.desc}&status=${this.status}`);
         
             e.preventDefault();
             return false;
+          },
+        handleResponse(xhr, parseResponse){
+            const content = document.querySelector('#content');
+            switch(xhr.status) {
+              case 200: //if success
+                content.innerHTML = `<b>Success</b>`;
+                break;
+              case 201: //if created
+                content.innerHTML = '<b>Create</b>';
+                break;
+              case 204: //if updated
+                content.innerHTML = '<b>Updated (No Content)</b>';
+                break;
+              case 400: //if bad request
+                content.innerHTML = `<b>Bad Request</b>`;
+                break;
+              case 404: //if not found
+                content.innerHTML = `<b>Resource Not Found</b>`;
+                break;
+              default: //any other status
+                content.innerHTML = `Error code not implemented by client.`;
+                break;
+            }
+            
+            //if we are expecting a response body (not in a head request)
+            if(parseResponse) {
+              const obj = JSON.parse(xhr.response);
+              content.innerHTML += `<p>${xhr.response}</p>`;
+            } else { 
+              //if not parsing a response, just alert that meta data was recieved
+              content.innerHTML += '<p>Meta Data Recieved</p>';
+            }
           },
     },
 })

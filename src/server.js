@@ -45,12 +45,10 @@ const urlStruct = {
     '/styles.css': htmlHandler.getStylesheet,
     '/main.js': htmlHandler.getMainjs,
     '/getCards': jsonHandler.getCards,
-    '/notReal': jsonHandler.notFound,
     notFound: jsonHandler.notFound,
   },
   HEAD: {
     '/getCards': jsonHandler.getCardsMeta,
-    '/notReal': jsonHandler.notFoundMeta,
     notFound: jsonHandler.getUsersMeta,
   },
   POST: {
@@ -63,6 +61,7 @@ const onRequest = (request, response) => {
 
   // check if a handler for the request is implemented
   if (urlStruct[request.method][parsedUrl.pathname]) {
+    console.log(urlStruct[request.method][parsedUrl.pathname]);
     // check if method is POST
     if (request.method === 'POST') {
       handlePost(request, response, parsedUrl);
@@ -70,7 +69,7 @@ const onRequest = (request, response) => {
       urlStruct[request.method][parsedUrl.pathname](request, response);
     }
   } else {
-    urlStruct[request.method].notFound(request, response);
+    // urlStruct[request.method].notFound(request, response);
   }
 };
 
