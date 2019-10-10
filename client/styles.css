@@ -1,0 +1,13 @@
+body{
+    padding: 2%;
+}
+.column{
+    border-right: 3px solid black;
+}
+
+@media only screen and (max-width: 768px) {
+    .column{
+        border: 0;
+        border-top: 3px solid black;
+    }
+}

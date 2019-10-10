@@ -11,8 +11,8 @@ const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
 // handle POST requests
 const handlePost = (request, response, parsedUrl) => {
-  // post is to /addUser
-  if (parsedUrl.pathname === '/addUser') {
+  // post is to /createCard
+  if (parsedUrl.pathname === '/createCard') {
     const res = response;
 
     // uploads come in as a byte stream that we need
@@ -34,7 +34,7 @@ const handlePost = (request, response, parsedUrl) => {
     request.on('end', () => {
       const bodyString = Buffer.concat(body).toString();
       const bodyParams = query.parse(bodyString);
-      jsonHandler.addUser(request, res, bodyParams);
+      jsonHandler.createCard(request, res, bodyParams);
     });
   }
 };
@@ -42,19 +42,19 @@ const handlePost = (request, response, parsedUrl) => {
 const urlStruct = {
   GET: {
     '/': htmlHandler.getIndex,
-    '/style.css': htmlHandler.getStylesheet,
+    '/styles.css': htmlHandler.getStylesheet,
     '/main.js': htmlHandler.getMainjs,
-    '/getUsers': jsonHandler.getUsers,
+    '/getCards': jsonHandler.getCards,
     '/notReal': jsonHandler.notFound,
     notFound: jsonHandler.notFound,
   },
   HEAD: {
-    '/getUsers': jsonHandler.getUsersMeta,
+    '/getCards': jsonHandler.getCardsMeta,
     '/notReal': jsonHandler.notFoundMeta,
     notFound: jsonHandler.getUsersMeta,
   },
   POST: {
-    '/addUser': jsonHandler.addUser,
+    '/createCard': jsonHandler.createCard,
   },
 };
 

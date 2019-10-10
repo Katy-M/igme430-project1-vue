@@ -1,4 +1,4 @@
-const users = {}; // purely in memory
+const cards = {}; // purely in memory
 
 // takes request, response, status code and object to send
 const respondJSON = (request, response, status, object) => {
@@ -32,44 +32,44 @@ const respondJSONMeta = (request, response, status) => {
   response.end();
 };
 
-// get user object
+// get cards users have created
 // should calculate a 200
-const getUsers = (request, response) => {
+const getCards = (request, response) => {
   const responseJSON = {
-    users,
+    cards,
   };
 
   return respondJSON(request, response, 200, responseJSON);
 };
 
-// get meta info about user object
+// get meta info about card object
 // should calculate a 200
-const getUsersMeta = (request, response) => {
+const getCardsMeta = (request, response) => {
   respondJSONMeta(request, response, 200);
 };
 
-const addUser = (request, response, body) => {
+const createCard = (request, response, body) => {
   // make sure a name and age are included, else send a bad request
   if (!body.name || !body.age) {
     const responseJSON = {
-      message: 'You must provide both a name and an age.',
+      message: 'You must provide all of the above information.',
       id: 'badRequest',
     };
     return respondJSON(request, response, 400, responseJSON);
   }
-  const newUser = {
+  const newCard = {
     name: body.name,
     age: body.age,
   };
 
-  if (users[newUser.name]) {
-    users[newUser.name] = newUser;
+  if (cards[newCard.name]) {
+    cards[newCard.name] = newCard;
     // return a 204 updated status
-    return respondJSON(request, response, 204, newUser);
+    return respondJSON(request, response, 204, newCard);
   }
-  // create the new user and return 201 status
-  users[newUser.name] = newUser;
-  return respondJSON(request, response, 201, newUser);
+  // create the new card and return 201 status
+  cards[newCard.name] = newCard;
+  return respondJSON(request, response, 201, newCard);
 };
 
 // function for 404 not found without message
@@ -78,9 +78,9 @@ const notFoundMeta = (request, response) => {
 };
 
 module.exports = {
-  getUsers,
-  getUsersMeta,
-  addUser,
+  getCards,
+  getCardsMeta,
+  createCard,
   notFound,
   notFoundMeta,
 };
