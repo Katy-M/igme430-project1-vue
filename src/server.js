@@ -44,7 +44,6 @@ const urlStruct = {
     '/': htmlHandler.getIndex,
     '/style.css': htmlHandler.getStylesheet,
     '/main.js': htmlHandler.getMainjs,
-    '/vue-components.js': htmlHandler.getVueComps,
     '/getUsers': jsonHandler.getUsers,
     '/notReal': jsonHandler.notFound,
     notFound: jsonHandler.notFound,
