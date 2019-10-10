@@ -59,15 +59,14 @@ Vue.component('createform', {
     </form>
     `,
     methods: {
-        requestCreate = (e, nameForm) => {
-            // grab name and age fields
-            const name = nameForm.querySelector('#nameField').value;
-            const age = nameForm.querySelector('#ageField').value;
+        // POST request for creating a new card
+        requestCreate: function (e, nameForm) {
+            // grab properties
         
             //create a new AJAX request (asynchronous)
             const xhr = new XMLHttpRequest();
             //setup connect using the selected method and url
-            xhr.open('POST', '/addUser', true);
+            xhr.open('POST', '/', true);
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
             xhr.setRequestHeader ('Accept', 'application/json');
             
@@ -85,24 +84,3 @@ var app = new Vue({
     el: '#app',
     data: {},
 })
-
-// for POST request to create a new user
-const requestCreate = (e, nameForm) => {
-    // grab name and age fields
-    const name = nameForm.querySelector('#nameField').value;
-    const age = nameForm.querySelector('#ageField').value;
-
-    //create a new AJAX request (asynchronous)
-    const xhr = new XMLHttpRequest();
-    //setup connect using the selected method and url
-    xhr.open('POST', '/addUser', true);
-    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    xhr.setRequestHeader ('Accept', 'application/json');
-    
-    xhr.onload = () => handleResponse(xhr, true);
-
-    xhr.send(`name=${name}&age=${age}`);
-
-    e.preventDefault();
-    return false;
-  };
