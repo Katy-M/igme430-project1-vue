@@ -1,4 +1,6 @@
-const cards = {}; // purely in memory
+const todoCards = {}; // purely in memory
+const inprogressCards = {};
+const completeCards = {};
 
 // takes request, response, status code and object to send
 const respondJSON = (request, response, status, object) => {
@@ -36,7 +38,9 @@ const respondJSONMeta = (request, response, status) => {
 // should calculate a 200
 const getCards = (request, response) => {
   const responseJSON = {
-    cards,
+    todoCards,
+    inprogressCards,
+    completeCards,
   };
 
   return respondJSON(request, response, 200, responseJSON);
@@ -66,13 +70,24 @@ const createCard = (request, response, body) => {
     status: body.status,
   };
 
-  if (cards[newCard.title]) {
-    cards[newCard.title] = newCard;
+  /* if (cards[newCard.title]) {
     // return a 204 updated status
-    return respondJSON(request, response, 204, newCard);
-  }
+    // return respondJSON(request, response, 204, newCard);
+  } */
   // create the new card and return 201 status
-  cards[newCard.title] = newCard;
+  switch (newCard.status) {
+    case 'todo':
+      todoCards[newCard.title] = newCard;
+      break;
+    case 'inprogress':
+      inprogressCards[newCard.title] = newCard;
+      break;
+    case 'completed':
+      completeCards[newCard.title] = newCard;
+      break;
+    default:
+      break;
+  }
   return respondJSON(request, response, 201, newCard);
 };
 

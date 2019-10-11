@@ -14,42 +14,37 @@
 
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  
-  <script type="text/babel">
-  
 
-    const requestUpdate = (e, userForm) => {
+  <script type="text/babel">
+  const init = () => {
+    const getCards = (e) => requestUpdate(e);
+  };
+
+  const requestUpdate = (e, status) => {
       // grab url field 
-      const url = userForm.querySelector('#urlField').value;
-      // grab method selected
-      const method = userForm.querySelector('#methodSelect').value;
-      
+      const url = '/getCards'
+
       //create a new AJAX request (asynchronous)
       const xhr = new XMLHttpRequest();
-      //setup connect using the selected method and url
-      xhr.open(method, url);
+      //setup connect using the selected url
+      xhr.open('GET', url);
       xhr.setRequestHeader('Accept', 'application/json');
 
-      if(method == 'get') {
-        //set onload to parse request and get json message
-        xhr.onload = () => handleResponse(xhr, true);
-      } else {
-        // head request
-        xhr.onload = () => handleResponse(xhr, false);
-      }
-      //send ajax request
+      //set onload to parse request and get json message
+      xhr.onload = () => handleResponse(xhr, true);
       xhr.send();
 
       e.preventDefault();
       return false;
     };
-    
-    const init = () => {
 
-    };
+    const handleResponseGet = (xhr, parseResponse) =>{
+      
+    }
 
     window.onload = init;
   </script>
+
 </head>
 <body>
   <div id="app">
@@ -57,7 +52,7 @@
     <vueheading title="Plotting Productivity"></vueheading>
     <hr></hr>
     <div class="row justify-content-center">
-      <vuecolumn title="To-Do"></vuecolumn>
+      <vuecolumn title="To-Do" cards=></vuecolumn>
       <vuecolumn title="In Progress"></vuecolumn>
       <vuecolumn title="Completed"></vuecolumn>
     </div>
@@ -66,10 +61,10 @@
     </div>
   </div>
 
-  <div id="content"></div> 
+  <div class="container-fluid justify-content-center text-center" id="content"></div> 
 
     <!-- My scripts -->
-    <script src="main.js"></script>
+    <script type="text/babel" src="main.js"></script>
 
   <!-- BOOTSTRAP: jQuery first, then Popper.js, then Bootstrap JS -->
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>

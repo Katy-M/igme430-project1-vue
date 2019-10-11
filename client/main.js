@@ -9,11 +9,11 @@ Vue.component('vueheading', {
 });
 
 Vue.component('vuecolumn', {
-    props: ['title'],
+    props: ['title', 'cards'],
     template: `
     <div class="col-lg-4 col-md-4 column" id="todo">
         <h2>{{ title }}</h2>
-        <vuecard title="Example card" desc="Uwu"></vuecard>
+        
     </div>
     `,
 });
@@ -38,7 +38,6 @@ Vue.component('vuecard', {
 });
 
 Vue.component('createform', {
-    props: [],
     data: function(){
         return{
             title: 'enter title',

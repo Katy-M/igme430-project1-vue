@@ -61,7 +61,6 @@ const onRequest = (request, response) => {
 
   // check if a handler for the request is implemented
   if (urlStruct[request.method][parsedUrl.pathname]) {
-    console.log(urlStruct[request.method][parsedUrl.pathname]);
     // check if method is POST
     if (request.method === 'POST') {
       handlePost(request, response, parsedUrl);
