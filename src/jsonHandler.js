@@ -24,16 +24,6 @@ const notFound = (request, response) => {
   respondJSON(request, response, 404, responseJSON);
 };
 
-const respondJSONMeta = (request, response, status) => {
-  const headers = {
-    'Content-Type': 'application/json',
-  };
-
-  // send response without json object, just headers
-  response.writeHead(status, headers);
-  response.end();
-};
-
 // get cards users have created
 // should calculate a 200
 const getCards = (request, response) => {
@@ -44,12 +34,6 @@ const getCards = (request, response) => {
   };
 
   return respondJSON(request, response, 200, responseJSON);
-};
-
-// get meta info about card object
-// should calculate a 200
-const getCardsMeta = (request, response) => {
-  respondJSONMeta(request, response, 200);
 };
 
 const createCard = (request, response, body) => {
@@ -70,11 +54,15 @@ const createCard = (request, response, body) => {
     status: body.status,
   };
 
-  /* if (cards[newCard.title]) {
+  if (todoCards[newCard.title] || inprogressCards[newCard.title]
+    || completeCards[newCard.title]) {
+    // Move the card to the correct column
+
     // return a 204 updated status
-    // return respondJSON(request, response, 204, newCard);
-  } */
+    return respondJSON(request, response, 204, newCard);
+  }
   // create the new card and return 201 status
+  let responseJSON = {};
   switch (newCard.status) {
     case 'todo':
       todoCards[newCard.title] = newCard;
@@ -86,20 +74,17 @@ const createCard = (request, response, body) => {
       completeCards[newCard.title] = newCard;
       break;
     default:
-      break;
+      responseJSON = {
+        message: 'New card status not recognized by the server.',
+        id: 'serverError',
+      };
+      return respondJSON(request, response, 500, responseJSON);
   }
   return respondJSON(request, response, 201, newCard);
 };
 
-// function for 404 not found without message
-const notFoundMeta = (request, response) => {
-  respondJSONMeta(request, response, 404);
-};
-
 module.exports = {
   getCards,
-  getCardsMeta,
   createCard,
   notFound,
-  notFoundMeta,
 };

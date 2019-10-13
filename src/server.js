@@ -47,10 +47,6 @@ const urlStruct = {
     '/getCards': jsonHandler.getCards,
     notFound: jsonHandler.notFound,
   },
-  HEAD: {
-    '/getCards': jsonHandler.getCardsMeta,
-    notFound: jsonHandler.getUsersMeta,
-  },
   POST: {
     '/createCard': jsonHandler.createCard,
   },

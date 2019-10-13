@@ -9,11 +9,24 @@ Vue.component('vueheading', {
 });
 
 Vue.component('vuecolumn', {
-    props: ['title', 'cards'],
+    props: ['title', 'todoCards'],
     template: `
-    <div class="col-lg-4 col-md-4 column" id="todo">
+    <div class="col-lg-4 col-md-4 column">
         <h2>{{ title }}</h2>
-        
+        <vuecard
+            v-for='card in todoCards'
+            v-bind:key='card.title'
+            v-bind:title='card.title'
+            v-bind:desc='card.desc'
+            v-bind:duedate='card.duedate'
+            v-bind:priority='card.priority'
+        ></vuecard>
+        <vuecard
+          title="Example"
+          desc="Description of Task"
+          duedate="2019-08-08"
+          priority=3
+        ></vuecard>
     </div>
     `,
 });
@@ -24,7 +37,9 @@ Vue.component('vuecard', {
     <div class="card container-fluid" id="todo">
         <h3>{{ title }}</h3>
         <ul>
-            <li class="due">Due Date</li>
+            <li class="due">
+              Due Date: {{ duedate }}
+            </li>
             <li class="priority">
                 Priority Level: {{ priority }}
             </li>
@@ -32,7 +47,6 @@ Vue.component('vuecard', {
                 <p>{{ desc }}</p>
             </li>
         </ul>
-        <button>Edit Card</button>
     </div>
     `,
 });
@@ -83,13 +97,10 @@ Vue.component('createform', {
             e.preventDefault();
             return false;
           },
-        handleResponse(xhr, parseResponse){
+        handleResponse(xhr){
             const content = document.querySelector('#content');
             switch(xhr.status) {
-              case 200: //if success
-                content.innerHTML = `<b>Success</b>`;
-                break;
-              case 201: //if created
+              case 201: //if created, put vue card components under the correct components
                 content.innerHTML = '<b>Create</b>';
                 break;
               case 204: //if updated
@@ -101,24 +112,41 @@ Vue.component('createform', {
               case 404: //if not found
                 content.innerHTML = `<b>Resource Not Found</b>`;
                 break;
+              case 500: //server error
+                content.innerHTML = `<b>Internal Server Error</b>`;
+                break;
               default: //any other status
                 content.innerHTML = `Error code not implemented by client.`;
                 break;
             }
-            
-            //if we are expecting a response body (not in a head request)
-            if(parseResponse) {
-              const obj = JSON.parse(xhr.response);
               content.innerHTML += `<p>${xhr.response}</p>`;
-            } else { 
               //if not parsing a response, just alert that meta data was recieved
               content.innerHTML += '<p>Meta Data Recieved</p>';
-            }
           },
     },
 })
 
 var app = new Vue({
     el: '#app',
-    data: {},
+    data: {
+      // get all of these cards from the server that the user creates
+      todoCards: [],
+      inprogressCards: [],
+      completedCards: [],
+    },
+    template: 
+    `
+    <div>
+    <vueheading title="Plotting Productivity"></vueheading>
+    <hr></hr>
+    <div class="row justify-content-center">
+      <vuecolumn title="To-Do" :todoCards="this.todoCards" ></vuecolumn>
+      <vuecolumn title="In Progress"></vuecolumn>
+      <vuecolumn title="Completed"></vuecolumn>
+    </div>
+    <div class="container-fluid">
+        <createform></createform>
+    </div>
+    </div>
+    `,
 })

@@ -17,7 +17,9 @@
 
   <script type="text/babel">
   const init = () => {
-    const getCards = (e) => requestUpdate(e);
+    document.querySelector('#app').addEventListener('load', (e, status) => {
+      requestUpdate(e, status);
+    });
   };
 
   const requestUpdate = (e, status) => {
@@ -31,35 +33,42 @@
       xhr.setRequestHeader('Accept', 'application/json');
 
       //set onload to parse request and get json message
-      xhr.onload = () => handleResponse(xhr, true);
+      xhr.onload = () => {
+        const content = document.querySelector('#content');
+        const obj = JSON.parse(xhr.response);
+        console.log(obj);
+        switch(xhr.status) {
+          case 200:
+            if(status == 'todoCards'){
+              app.todoCards = obj.todoCards;
+            } else if (status == 'inprogressCards'){
+              app.inprogressCards = obj.inprogressCards;
+            } else app.completedCards = obj.completeCards;
+            content.innerHTML = `<b>Success</b>`;
+          break;
+          case 404: //if not found
+            content.innerHTML = `<b>Resource Not Found</b>`;
+            break;
+          case 500: //server error
+            content.innerHTML = `<b>Internal Server Error</b>`;
+            break;
+          default: //any other status
+            content.innerHTML = `Error code not implemented by client.`;
+            break;
+        }
+      };
       xhr.send();
 
       e.preventDefault();
       return false;
     };
 
-    const handleResponseGet = (xhr, parseResponse) =>{
-      
-    }
-
-    window.onload = init;
+    window.onload = init();
   </script>
 
 </head>
 <body>
-  <div id="app">
-    <!-- vue components here -->
-    <vueheading title="Plotting Productivity"></vueheading>
-    <hr></hr>
-    <div class="row justify-content-center">
-      <vuecolumn title="To-Do" cards=></vuecolumn>
-      <vuecolumn title="In Progress"></vuecolumn>
-      <vuecolumn title="Completed"></vuecolumn>
-    </div>
-    <div class="container-fluid">
-        <createform></createform>
-    </div>
-  </div>
+  <div id="app"></div>
 
   <div class="container-fluid justify-content-center text-center" id="content"></div> 
 
